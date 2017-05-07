@@ -62,4 +62,54 @@ public class QshReaderFactoryTest {
         MatcherAssert.assertThat(typeSum, CoreMatchers.equalTo(3141022));
         MatcherAssert.assertThat(count, CoreMatchers.equalTo(893420));
     }
+
+    @Test
+    public void testDealNew() throws Exception {
+        Iterator<Deal> open = new QshReaderFactory().openPath("src/test/resources/GAZP.2017-04-24.Deals.qsh");
+
+        double priceSum = 0;
+        int volumeSum = 0;
+        int typeSum = 0;
+        int count = 0;
+
+        while (open.hasNext()) {
+            Deal next = open.next();
+
+            priceSum += next.getPrice();
+            volumeSum += next.getVolume();
+            typeSum += next.getType().getValue();
+            count++;
+        }
+
+        MatcherAssert.assertThat(priceSum, CoreMatchers.equalTo(9931594.670000277D));
+        MatcherAssert.assertThat(volumeSum, CoreMatchers.equalTo(6679694));
+        MatcherAssert.assertThat(typeSum, CoreMatchers.equalTo(110942));
+        MatcherAssert.assertThat(count, CoreMatchers.equalTo(78870));
+    }
+
+    @Test
+    public void testQuotesNew() throws Exception {
+        Iterator<Quotes> open = new QshReaderFactory().openPath("src/test/resources/GAZP.2017-04-24.Quotes.qsh");
+
+        double priceSum = 0;
+        int volumeSum = 0;
+        int typeSum = 0;
+        int count = 0;
+
+        while (open.hasNext()) {
+            Quotes next = open.next();
+
+            for (Quote quote : next.getQuotes()) {
+                priceSum += quote.getPrice();
+                volumeSum += quote.getVolume();
+                typeSum += quote.getType().getValue();
+                count++;
+            }
+        }
+
+        MatcherAssert.assertThat(priceSum, CoreMatchers.equalTo(3.780720769000068E7D));
+        MatcherAssert.assertThat(volumeSum, CoreMatchers.equalTo(206313372));
+        MatcherAssert.assertThat(typeSum, CoreMatchers.equalTo(1100598));
+        MatcherAssert.assertThat(count, CoreMatchers.equalTo(301279));
+    }
 }
